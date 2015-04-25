@@ -1,0 +1,109 @@
+int dirPin = 2; //Sets pin 2 to the stepper direction pin
+int stepperPin = 3; //Sets pin 3 to the stepper pin output 
+int ls = 4; //Setting pin value of limit switch
+int startup = 0; //Value if the startup has been ran or not to zero the head.
+int ls_current = HIGH; //Current value of limit switch
+
+
+int h_pos = 0; //Current head position
+int stepDistance = 0; //How many steps the motor should take
+int cup1 = 1000; //Position of cup 1 through 3
+int cup2 = 2000;
+int cup3 = 3000;
+
+#include <Keypad.h>
+const byte Rows = 3; //three rows
+const byte Col = 4; //four columns
+char keys[Rows][Col] =
+{
+  {'1','2','3','4' } , //drink locations
+  {'A','B','C','P' } , //3 drink order and prime
+  {'D','E','F','R' } , //3 drink order and reset/clear
+};
+
+byte rowPins[Rows] = { 3, 4, 5 }; //pins set for rows
+byte colPins[Col] = { 6, 7, 8, 9}; //pins set for columns
+Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, Rows, Col ); //switch panel creation
+
+
+void setup() {
+  pinMode(dirPin, OUTPUT); //Sets pinmode to output for direction pin
+  pinMode(stepperPin, OUTPUT); //Sets pinmode to output for tepperpin
+  pinMode(ls, INPUT);
+  pinMode(10, INPUT);//Push button 1 set to input on pin 10
+  pinMode(11, INPUT);//Push button 2 set to input on pin 11
+  pinMode(12, INPUT);//Push button 3 set to input on pin 12
+}
+
+void step(boolean dir, int steps) { //Step function for stepping motor
+  digitalWrite(dirPin, dir);
+  delay(5);
+  for (int i = 0; i < steps; i++) {
+    digitalWrite(stepperPin, HIGH);
+    delayMicroseconds(100);
+    digitalWrite(stepperPin, LOW);
+    delayMicroseconds(100);
+  }
+}
+
+int zeroHead() { //Zero head function will run motor to the end stop, and set current position to zero.
+  while (ls_current == HIGH) {
+    step(false, 400);
+    ls_current = digitalRead(ls);
+    delay(0);
+  }
+}
+
+void loop() {
+
+  if (startup == 0) { //If statement to start the zero-head function
+    zeroHead();
+    startup = 1;
+    h_pos = 0;
+  }
+    
+    
+    char key = keypad.getKey();
+    if (key != NO_KEY)
+    {
+   switch (key)
+   {
+     case '1':
+    
+     break;
+     case '2':
+     
+     break;
+     case '3':
+     
+     break;
+     case '4':
+     
+     break;
+     default:
+     Serial.println(key);
+  }
+}
+}
+
+
+
+  if (digitalRead(6) == HIGH) { //Sends head to position one
+    stepDistance = cup1 - h_pos;
+    step(true, stepDistance);
+    h_pos = cup1;
+  }
+  if (digitalRead(7) == HIGH) { //Sends head to position one
+    stepDistance = cup2 - h_pos;
+    step(true, stepDistance);
+    h_pos = cup2;
+  }
+  if (digitalRead(8) == HIGH) { //Sends head to position one
+    stepDistance = cup3 - h_pos;
+    step(true, stepDistance);
+    h_pos = cup3;
+    delay(1000);
+    step(false, h_pos);
+    h_pos = 0;
+  }
+}
