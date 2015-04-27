@@ -1,0 +1,80 @@
+#include <Keypad.h>
+
+const byte Rows = 3; //three rows
+const byte Col = 4; //four columns
+char keys[Rows][Col] =
+{
+  {'1','2','3','4' } , //drink locations
+  {'A','B','C','R' } , //3 drink order and Reset/Clear
+  {'D','E','F','S' } , //3 drink order and Start
+};
+
+byte rowPins[Rows] = { 3, 4, 5 }; //pins set for rows
+byte colPins[Col] = { 6, 7, 8, 9}; //pins set for columns
+Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, Rows, Col ); //switch panel creation
+
+void setup()
+{
+
+  Serial.begin(9600);
+}
+int OrderUp ()
+{
+  char key = keypad.getKey();
+  if (key != NO_KEY)
+  {
+switch (key)
+   {
+     case 'A':
+     
+     return 1;
+     case 'B':
+     
+     return 2;
+     case 'C':
+     
+     return 3;
+     case 'D':
+     
+     return 4;
+     case 'E':
+     
+     return 5;
+     case 'F':
+     
+     return 6;
+
+  }
+}
+}
+
+void loop() {
+  char key = keypad.getKey();
+   if (key != NO_KEY)
+  {
+switch (key)
+   {
+     case '1':
+     OrderUp();
+     break;
+     case '2':
+     OrderUp();
+     break;
+     case '3':
+     OrderUp();
+     break;
+     case '4':
+     OrderUp();
+     break;
+     case 'R':
+     
+     break;
+     case 'S':
+     
+     break;
+
+  }
+  }
+}
+
+
