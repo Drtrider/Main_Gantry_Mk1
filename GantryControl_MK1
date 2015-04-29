@@ -1,7 +1,7 @@
-// GantryControl_Mk1
+// GantryControl_Mk2
 // By: Jeret Shuck
 int dirPin = 2; //Sets pin 2 to the stepper direction pin
-int stepperPin = 3; //Sets pin 3 to the stepper pin output 
+int stepperPin = 3; //Sets pin 3 to the stepper pin output
 int ls = 4; //Setting pin value of limit switch
 int startup = 0; //Value if the startup has been ran or not to zero the head.
 int ls_current = HIGH; //Current value of limit switch
@@ -12,6 +12,7 @@ int stepDistance = 0; //How many steps the motor should take
 int cup1 = 1000; //Position of cup 1 through 3
 int cup2 = 2000;
 int cup3 = 3000;
+int cup4 = 4000;
 
 
 
@@ -21,6 +22,7 @@ void setup() {
   pinMode(ls, INPUT);
   pinMode(6, INPUT);//Push button 1 set to input on pin 6
   pinMode(7, INPUT);//Push button 2 set to input on pin 7
+  pinMode(8, INPUT);//Push button 3 set to input on pin 8
   pinMode(8, INPUT);//Push button 3 set to input on pin 8
 }
 
@@ -39,7 +41,7 @@ int zeroHead() { //Zero head function will run motor to the end stop, and set cu
   while (ls_current == HIGH) {
     step(false, 400);
     ls_current = digitalRead(ls);
-    delay(0);
+    delay(10);
   }
 }
 
@@ -53,20 +55,53 @@ void loop() {
 
   if (digitalRead(6) == HIGH) { //Sends head to position one
     stepDistance = cup1 - h_pos;
-    step(true, stepDistance);
+    if (stepDistance < 0) {
+      step(false, abs(stepDistance));
+    }
+    else
+    {
+      step(true, stepDistance);
+    }
     h_pos = cup1;
+    delay(500);
   }
-  if (digitalRead(7) == HIGH) { //Sends head to position one
+
+  if (digitalRead(7) == HIGH) { //Sends head to position two
     stepDistance = cup2 - h_pos;
-    step(true, stepDistance);
+    if (stepDistance < 0) {
+      step(false, abs(stepDistance));
+    }
+    else
+    {
+      step(true, stepDistance);
+    }
     h_pos = cup2;
+    delay(500);
   }
-  if (digitalRead(8) == HIGH) { //Sends head to position one
+
+  if (digitalRead(8) == HIGH) { //Sends head to position three
     stepDistance = cup3 - h_pos;
-    step(true, stepDistance);
+    if (stepDistance < 0) {
+      step(false, abs(stepDistance));
+    }
+    else
+    {
+      step(true, stepDistance);
+    }
     h_pos = cup3;
-    delay(1000);
-    step(false, h_pos);
-    h_pos = 0;
+    delay(500);
+  }
+
+  if (digitalRead(9) == HIGH) { //Sends head to position Four
+    stepDistance = cup4 - h_pos;
+    if (stepDistance < 0) {
+      step(false, abs(stepDistance));
+    }
+    else
+    {
+      step(true, stepDistance);
+    }
+    h_pos = cup4;
+    delay(500);
   }
 }
