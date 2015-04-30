@@ -25,9 +25,9 @@ const byte Rows = 3; //three rows
 const byte Col = 4; //four columns
 char keys[Rows][Col] =
 {
-  {'1','2','3','4' } , //drink locations
-  {'A','B','C','R' } , //3 drink order and Reset/Clear
-  {'D','E','F','S' } , //3 drink order and Start
+  {'1', '2', '3', '4' } , //drink locations
+  {'A', 'B', 'C', 'R' } , //3 drink order and Reset/Clear
+  {'D', 'E', 'F', 'S' } , //3 drink order and Start
 };
 
 byte rowPins[Rows] = { 3, 4, 5 }; //pins set for rows
@@ -65,29 +65,29 @@ void OrderUp ()
   char key = keypad.getKey();
   if (key != NO_KEY)
   {
-switch (key)
-   {
-     case 'A':
-     
-     break;
-     case 'B':
-     
-     break;
-     case 'C':
-     
-     break;
-     case 'D':
-     
-     break;
-     case 'E':
-     
-     break;
-     case 'F':
-     
-     break;
+    switch (key)
+    {
+      case 'A':
 
+        break;
+      case 'B':
+
+        break;
+      case 'C':
+
+        break;
+      case 'D':
+
+        break;
+      case 'E':
+
+        break;
+      case 'F':
+
+        break;
+
+    }
   }
-}
 }
 
 int zeroHead() { //Zero head function will run motor to the end stop, and set current position to zero.
@@ -165,76 +165,88 @@ int drinkF()
 }
 
 void loop() {
-    if (startup == 0) { //If statement to start the zero-head function
+  if (startup == 0) { //If statement to start the zero-head function
     zeroHead();
     startup = 1;
     h_pos = 0;
   }
   char key = keypad.getKey(); //waits for a key to be pressed
-   if (key != NO_KEY)
+  if (key != NO_KEY)
   {
-switch (key) //takes pressed key and matches with the correct situation and moves accordingly
-   {
-     case '1':
-    stepDistance = cup1 - h_pos;
-    if (stepDistance < 0) {
-      step(false, abs(stepDistance));
-    }
-    else
+    switch (key) //takes pressed key and matches with the correct situation and moves accordingly
     {
-      step(true, stepDistance);
-    }
-    h_pos = cup1;
-    delay(500);
-     OrderUp();
-     break;
-     case '2':
-    stepDistance = cup2 - h_pos;
-    if (stepDistance < 0) {
-      step(false, abs(stepDistance));
-    }
-    else
-    {
-      step(true, stepDistance);
-    }
-    h_pos = cup2;
-    delay(500);
-     OrderUp();
-     break;
-     case '3':
-    stepDistance = cup3 - h_pos;
-    if (stepDistance < 0) {
-      step(false, abs(stepDistance));
-    }
-    else
-    {
-      step(true, stepDistance);
-    }
-    h_pos = cup3;
-    delay(500);
-     OrderUp();
-     break;
-     case '4':
-    stepDistance = cup4 - h_pos;
-    if (stepDistance < 0) {
-      step(false, abs(stepDistance));
-    }
-    else
-    {
-      step(true, stepDistance);
-    }
-    h_pos = cup4;
-    delay(500);
-     OrderUp();
-     break;
-     case 'R':
-     
-     break;
-     case 'S':
-     
-     break;
+      case '1':
+        stepDistance = cup1 - h_pos;
+        if (stepDistance < 0)
+        {
+          step(false, abs(stepDistance));
+        }
+        else
+        {
+          step(true, stepDistance);
+        }
 
-  }
+        h_pos = cup1;
+        delay(500);
+        OrderUp();
+        break;
+
+      case '2':
+        stepDistance = cup2 - h_pos;
+        if (stepDistance < 0)
+        {
+          step(false, abs(stepDistance));
+        }
+        else
+        {
+          step(true, stepDistance);
+        }
+
+        h_pos = cup2;
+        delay(500);
+        OrderUp();
+        break;
+
+      case '3':
+        stepDistance = cup3 - h_pos;
+        if (stepDistance < 0)
+        {
+          step(false, abs(stepDistance));
+        }
+        else
+        {
+          step(true, stepDistance);
+        }
+
+        h_pos = cup3;
+        delay(500);
+        OrderUp();
+        break;
+
+      case '4':
+        stepDistance = cup4 - h_pos;
+        if (stepDistance < 0)
+        {
+          step(false, abs(stepDistance));
+        }
+        else
+        {
+          step(true, stepDistance);
+        }
+
+        h_pos = cup4;
+        delay(500);
+        OrderUp();
+        break;
+
+      case 'R':
+
+        break;
+      case 'S':
+
+        break;
+
+    }
   }
 }
 
