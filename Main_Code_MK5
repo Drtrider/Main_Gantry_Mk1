@@ -1,0 +1,311 @@
+//Main_Code_MK5
+//By: Keith Cheung, Jeret Shuck
+#include <Keypad.h>
+int dirPin = 2; //Sets pin 2 to the stepper direction pin
+int stepperPin = 3; //Sets pin 3 to the stepper pin output
+int ls = 4; //Setting pin value of limit switch
+int startup = 0; //Value if the startup has been ran or not to zero the head.
+int ls_current = HIGH; //Current value of limit switch
+
+int cupFull = 0; //Value to be set if cupcheck returns a full cup.
+int cupMax = 0; //Maximum cup level.
+
+
+int h_pos = 0; //Current head position
+int stepDistance = 0; //How many steps the motor should take
+int cup1 = 1000; //Position of cup 1 through 3
+int cup2 = 2000;
+int cup3 = 3000;
+int cup4 = 4000;
+int motorPin1 = 10; //Sets pin values for motors
+int motorPin2 = 11;
+int motorPin3 = 12;
+int motorPin4 = 13;
+int motorPin5 = 14;
+int motorPin6 = 15;
+
+long RandMotor;
+long RandPour;
+
+const byte Rows = 3; //three rows
+const byte Col = 4; //four columns
+char keys[Rows][Col] =
+{
+  {'1', '2', '3', '4' } , //drink locations
+  {'A', 'B', 'C', 'H' } , //3 drink order and Manual Homing
+  {'D', 'E', 'F', 'M' } , //3 drink order and MYSTERY SHOT!!!
+};
+
+byte rowPins[Rows] = { 3, 4, 5 }; //pins set for rows
+byte colPins[Col] = { 6, 7, 8, 9}; //pins set for columns
+Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, Rows, Col ); //switch panel creation
+
+
+void setup()
+{
+  pinMode(dirPin, OUTPUT); //Sets pinmode to output for direction pin
+  pinMode(stepperPin, OUTPUT); //Sets pinmode to output for tepperpin
+  pinMode(ls, INPUT);
+  pinMode(motorPin1, INPUT);//Push button 1 set to input on pin 10
+  pinMode(motorPin2, INPUT);
+  pinMode(motorPin3, INPUT);
+  pinMode(motorPin4, INPUT);
+  pinMode(motorPin5, INPUT);
+  pinMode(motorPin6, INPUT);
+  Serial.begin(9600);
+}
+
+void step(boolean dir, int steps)
+{ //Step function for stepping motor
+  digitalWrite(dirPin, dir);
+  delay(5);
+  for (int i = 0; i < steps; i++) {
+    digitalWrite(stepperPin, HIGH);
+    delayMicroseconds(100);
+    digitalWrite(stepperPin, LOW);
+    delayMicroseconds(100);
+  }
+}
+
+void OrderUp ()
+{
+  char key = keypad.getKey();
+  if (key != NO_KEY)
+  {
+    switch (key)
+    {
+      case 'A':
+        drinkA();
+        break;
+      case 'B':
+        drinkB();
+        break;
+      case 'C':
+        drinkC();
+        break;
+      case 'D':
+        drinkD();
+        break;
+      case 'E':
+        drinkE();
+        break;
+      case 'F':
+        drinkF();
+        break;
+      case 'M':
+        RandMotor = random(LOW, HIGH);
+        RandPour = random(3000, 5000);
+
+        digitalWrite(motorPin1, RandMotor);
+        delay(RandPour);
+        digitalWrite(motorPin2, RandMotor);
+        delay(RandPour);
+        digitalWrite(motorPin3, RandMotor);
+        delay(RandPour);
+        digitalWrite(motorPin4, RandMotor);
+        delay(RandPour);
+        digitalWrite(motorPin5, RandMotor);
+        delay(RandPour);
+        digitalWrite(motorPin6, RandMotor);
+        delay(RandPour);
+        break;
+
+    }
+  }
+}
+
+int zeroHead()
+{ //Zero head function will run motor to the end stop, and set current position to zero.
+  while (ls_current == HIGH) {
+    step(false, 400);
+    ls_current = digitalRead(ls);
+    delay(10);
+  }
+}
+
+int levelCheck()//Function to check cup levels
+{
+  long cm;
+  pinMode(3, OUTPUT);// attach pin 3 to Trig
+  digitalWrite(3, LOW);
+  delayMicroseconds(2);
+  digitalWrite(3, HIGH);
+  delayMicroseconds(5);
+  digitalWrite(3, LOW);
+
+  pinMode (4, INPUT);//attach pin 4 to Echo
+  duration = pulseIn(4, HIGH);
+  cm = microsecondsToCentimeters(duration);// convert the time into a distance
+  
+  if (cm < cupMax)
+  {
+    cupFull = 1;
+  }
+  else
+  {
+    cupFull = 0;
+  }
+  
+  long microsecondsToCentimeters(long microseconds)//Function to convter distance to measurement
+  {
+    return microseconds / 29 / 2;
+  }
+
+}
+
+int drinkA() //Pour function for drinkA
+{
+  digitalWrit(motorPin1, HIGH);
+  digitalWrite(motorPin2, HIGH);
+  digitalWrite(motorPin3, HIGH);
+  digitalWrite(motorPin4, HIGH);
+  digitalWrite(motorPin5, HIGH);
+  digitalWrite(motorPin6, HIGH);
+  delay(1000);
+}
+
+int drinkB()
+{
+  digitalWrite(motorPin1, HIGH);
+  digitalWrite(motorPin2, HIGH);
+  digitalWrite(motorPin3, HIGH);
+  digitalWrite(motorPin4, HIGH);
+  digitalWrite(motorPin5, HIGH);
+  digitalWrite(motorPin6, HIGH);
+  delay(1000);
+}
+
+int drinkC()
+{
+  digitalWrite(motorPin1, HIGH);
+  digitalWrite(motorPin2, HIGH);
+  digitalWrite(motorPin3, HIGH);
+  digitalWrite(motorPin4, HIGH);
+  digitalWrite(motorPin5, HIGH);
+  digitalWrite(motorPin6, HIGH);
+  delay(1000);
+}
+
+int drinkD()
+{
+  digitalWrite(motorPin1, HIGH);
+  digitalWrite(motorPin2, HIGH);
+  digitalWrite(motorPin3, HIGH);
+  digitalWrite(motorPin4, HIGH);
+  digitalWrite(motorPin5, HIGH);
+  digitalWrite(motorPin6, HIGH);
+  delay(1000);
+}
+
+int drinkE()
+{
+  digitalWrite(motorPin1, HIGH);
+  digitalWrite(motorPin2, HIGH);
+  digitalWrite(motorPin3, HIGH);
+  digitalWrite(motorPin4, HIGH);
+  digitalWrite(motorPin5, HIGH);
+  digitalWrite(motorPin6, HIGH);
+  delay(1000);
+}
+
+int drinkF()
+{
+  digitalWrite(motorPin1, HIGH);
+  digitalWrite(motorPin2, HIGH);
+  digitalWrite(motorPin3, HIGH);
+  digitalWrite(motorPin4, HIGH);
+  digitalWrite(motorPin5, HIGH);
+  digitalWrite(motorPin6, HIGH);
+  delay(1000);
+}
+
+void loop()
+{
+  if (startup == 0)
+  { //If statement to start the zero-head function
+    zeroHead();
+    startup = 1;
+    h_pos = 0;
+  }
+
+  char key = keypad.getKey(); //waits for a key to be pressed
+  if (key != NO_KEY)
+  {
+    switch (key) //takes pressed key and matches with the correct situation and moves accordingly
+    {
+      case '1':
+        stepDistance = cup1 - h_pos;
+        if (stepDistance < 0)
+        {
+          step(false, abs(stepDistance));
+        }
+        else
+        {
+          step(true, stepDistance);
+        }
+
+        h_pos = cup1;
+        delay(500);
+        OrderUp();
+        break;
+
+      case '2':
+        stepDistance = cup2 - h_pos;
+        if (stepDistance < 0)
+        {
+          step(false, abs(stepDistance));
+        }
+        else
+        {
+          step(true, stepDistance);
+        }
+
+        h_pos = cup2;
+        delay(500);
+        OrderUp();
+        break;
+
+      case '3':
+        stepDistance = cup3 - h_pos;
+        if (stepDistance < 0)
+        {
+          step(false, abs(stepDistance));
+        }
+        else
+        {
+          step(true, stepDistance);
+        }
+
+        h_pos = cup3;
+        delay(500);
+        OrderUp();
+        break;
+
+      case '4':
+        stepDistance = cup4 - h_pos;
+        if (stepDistance < 0)
+        {
+          step(false, abs(stepDistance));
+        }
+        else
+        {
+          step(true, stepDistance);
+        }
+
+        h_pos = cup4;
+        delay(500);
+        OrderUp();
+        break;
+
+      case 'H':
+        startup = 0;
+        if (startup == 0) { //If statement to start the zero-head function
+          zeroHead();
+          startup = 1;
+          h_pos = 0;
+        }
+        break;
+
+    }
+  }
+}
