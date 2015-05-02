@@ -69,10 +69,10 @@ void step(boolean dir, int steps)
 
 void OrderUp ()
 {
-  char key = keypad.getKey();
-  if (key != NO_KEY)
+  char key2 = keypad.getKey();
+  if (key2 != NO_KEY)
   {
-    switch (key)
+    switch (key2)
     {
       case 'A':
         drinkA();
@@ -109,11 +109,18 @@ void OrderUp ()
         digitalWrite(motorPin6, RandMotor);
         delay(RandPour);
         break;
+        default:
+        Serial.println(key2);
 
     }
   }
 }
 
+  long microsecondsToCentimeters(long microseconds)//Function to convter distance to measurement
+  {
+    return microseconds / 29 / 2;
+  }
+  
 int zeroHead()
 { //Zero head function will run motor to the end stop, and set current position to zero.
   while (ls_current == HIGH) {
@@ -132,7 +139,7 @@ int levelCheck()//Function to check cup levels
   digitalWrite(3, HIGH);
   delayMicroseconds(5);
   digitalWrite(3, LOW);
-
+long duration;
   pinMode (4, INPUT);//attach pin 4 to Echo
   duration = pulseIn(4, HIGH);
   cm = microsecondsToCentimeters(duration);// convert the time into a distance
@@ -146,16 +153,13 @@ int levelCheck()//Function to check cup levels
     cupFull = 0;
   }
   
-  long microsecondsToCentimeters(long microseconds)//Function to convter distance to measurement
-  {
-    return microseconds / 29 / 2;
-  }
+
 
 }
 
 int drinkA() //Pour function for drinkA
 {
-  digitalWrit(motorPin1, HIGH);
+  digitalWrite(motorPin1, HIGH);
   digitalWrite(motorPin2, HIGH);
   digitalWrite(motorPin3, HIGH);
   digitalWrite(motorPin4, HIGH);
@@ -305,6 +309,8 @@ void loop()
           h_pos = 0;
         }
         break;
+        default:
+        Serial.println(key);
 
     }
   }
